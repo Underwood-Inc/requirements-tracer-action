@@ -9,9 +9,9 @@ Composite GitHub Action that runs the **requirements-tracer** CLI in CI:
 
 Published by [Underwood-Inc](https://github.com/Underwood-Inc).
 
-**Published repo:** https://github.com/Underwood-Inc/requirements-tracer-action — tag `v0.1.0`.
+**Published repo:** https://github.com/Underwood-Inc/requirements-tracer-action — tag `v0.1.1`.
 
-This folder is the source copy in the monorepo; CI consumers use `Underwood-Inc/requirements-tracer-action@v0.1.0`, not `./packages/...`.
+This folder is the source copy in the monorepo; CI consumers use `Underwood-Inc/requirements-tracer-action@v0.1.1`, not `./packages/...`.
 
 ## Quick start
 
@@ -35,9 +35,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: Underwood-Inc/requirements-tracer-action@v0.1.0
+      - uses: Underwood-Inc/requirements-tracer-action@v0.1.1
         with:
-          tracer-package: '@underwood-inc/requirements-tracer@0.1.0'
+          tracer-package: '@underwoodinc/requirements-tracer@0.1.1'
           token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
@@ -57,7 +57,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - uses: Underwood-Inc/requirements-tracer-action@v0.1.0
+      - uses: Underwood-Inc/requirements-tracer-action@v0.1.1
         with:
           working-directory: apps/my-app
           tracer-path: tools/requirements-tracer/dist/frames/cli.js

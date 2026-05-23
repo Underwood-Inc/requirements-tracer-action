@@ -1,0 +1,175 @@
+# Composite GitHub Action: audit → HTML report → artifact upload → PR comment.
+# Wraps the requirements-tracer CLI (tools/requirements-tracer in this monorepo).
+name: Requirements Tracer
+description: Audit test trace IDs against a requirements registry, generate an HTML report, upload it, and optionally post a PR comment.
+
+inputs:
+  working-directory:
+    description: Directory containing .traceability.yaml and the requirements registry (audit --root).
+    required: false
+    default: '.'
+  config-path:
+    description: Path to .traceability.yaml, relative to working-directory.
+    required: false
+    default: '.traceability.yaml'
+  registry-path:
+    description: Path to requirements-registry.yaml, relative to working-directory.
+    required: false
+    default: 'requirements-registry.yaml'
+  tracer-path:
+    description: Path to the tracer cli.js, relative to the repository root. Ignored when tracer-package is set.
+    required: false
+    default: 'tools/requirements-tracer/dist/frames/cli.js'
+  tracer-package:
+    description: Optional npm package for npx (e.g. @org/requirements-tracer or @org/requirements-tracer@0.1.0). Overrides tracer-path when set.
+    required: false
+    default: ''
+  build-tracer:
+    description: Run pnpm build:tracer at the repository root before audit (monorepo adopters with a local tracer checkout).
+    required: false
+    default: 'false'
+  strict:
+    description: Promote orphan, deprecated, and unknown-tag warnings to errors (--strict).
+    required: false
+    default: 'false'
+  post-comment:
+    description: Post a PR comment with the audit summary when the event is pull_request.
+    required: false
+    default: 'true'
+  artifact-name:
+    description: Name of the uploaded traceability report artifact.
+    required: false
+    default: 'traceability-report'
+  report-dir:
+    description: Report output directory relative to working-directory (must match .traceability.yaml output.reportDir).
+    required: false
+    default: 'traceability-report'
+  token:
+    description: GitHub token for PR comments (needs pull-requests write when post-comment is true).
+    required: false
+    default: ${{ github.token }}
+  node-version:
+    description: Node.js version for running the tracer CLI.
+    required: false
+    default: '22'
+
+outputs:
+  audit-outcome:
+    description: Outcome of the audit step (success or failure).
+    value: ${{ steps.audit.outcome }}
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node
+      uses: actions/setup-node@v6
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Build tracer
+      if: inputs.build-tracer == 'true'
+      shell: bash
+      run: pnpm build:tracer
+
+    - name: Run audit
+      id: audit
+      shell: bash
+      continue-on-error: true
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+        TRACE_ANNOTATIONS: github
+        TRACER_PATH: ${{ github.workspace }}/${{ inputs.tracer-path }}
+        TRACER_PACKAGE: ${{ inputs.tracer-package }}
+      run: |
+        set -euo pipefail
+        STRICT_FLAG=""
+        if [ "${{ inputs.strict }}" = "true" ]; then
+          STRICT_FLAG="--strict"
+        fi
+        if [ -n "$TRACER_PACKAGE" ]; then
+          npx --yes "$TRACER_PACKAGE" audit \
+            --root . \
+            --config "${{ inputs.config-path }}" \
+            --registry "${{ inputs.registry-path }}" \
+            $STRICT_FLAG
+        else
+          node "$TRACER_PATH" audit \
+            --root . \
+            --config "${{ inputs.config-path }}" \
+            --registry "${{ inputs.registry-path }}" \
+            $STRICT_FLAG
+        fi
+
+    - name: Generate HTML report
+      if: always()
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        TRACER_PATH: ${{ github.workspace }}/${{ inputs.tracer-path }}
+        TRACER_PACKAGE: ${{ inputs.tracer-package }}
+      run: |
+        set -euo pipefail
+        STRICT_FLAG=""
+        if [ "${{ inputs.strict }}" = "true" ]; then
+          STRICT_FLAG="--strict"
+        fi
+        if [ -n "$TRACER_PACKAGE" ]; then
+          npx --yes "$TRACER_PACKAGE" report \
+            --root . \
+            --config "${{ inputs.config-path }}" \
+            --registry "${{ inputs.registry-path }}" \
+            $STRICT_FLAG
+        else
+          node "$TRACER_PATH" report \
+            --root . \
+            --config "${{ inputs.config-path }}" \
+            --registry "${{ inputs.registry-path }}" \
+            $STRICT_FLAG
+        fi
+
+    - name: Upload report artifact
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ inputs.working-directory }}/${{ inputs.report-dir }}
+        retention-days: 30
+
+    - name: Post PR comment
+      if: always() && inputs.post-comment == 'true' && github.event_name == 'pull_request'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+        GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
+        TRACER_PATH: ${{ github.workspace }}/${{ inputs.tracer-path }}
+        TRACER_PACKAGE: ${{ inputs.tracer-package }}
+      run: |
+        set -euo pipefail
+        STRICT_FLAG=""
+        if [ "${{ inputs.strict }}" = "true" ]; then
+          STRICT_FLAG="--strict"
+        fi
+        if [ -n "$TRACER_PACKAGE" ]; then
+          npx --yes "$TRACER_PACKAGE" comment \
+            --root . \
+            --config "${{ inputs.config-path }}" \
+            --registry "${{ inputs.registry-path }}" \
+            --new --artifact-run "${{ github.run_id }}" \
+            $STRICT_FLAG
+        else
+          node "$TRACER_PATH" comment \
+            --root . \
+            --config "${{ inputs.config-path }}" \
+            --registry "${{ inputs.registry-path }}" \
+            --new --artifact-run "${{ github.run_id }}" \
+            $STRICT_FLAG
+        fi
+
+    - name: Fail on audit errors
+      if: steps.audit.outcome == 'failure'
+      shell: bash
+      run: |
+        echo "::error::Traceability audit found errors. See PR comment and uploaded artifact for details."
+        exit 1

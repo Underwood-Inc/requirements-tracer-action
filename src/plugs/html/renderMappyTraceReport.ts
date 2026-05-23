@@ -355,7 +355,7 @@ footer{padding:1rem 2rem;color:var(--muted);border-top:1px solid var(--border);f
 <footer>
   Built by <a href="${esc(branding.repoUrl)}" rel="noopener">@underwoodinc/requirements-tracer</a>
   · <a href="${esc(branding.docsUrl)}" rel="noopener">Documentation</a>
-  · CLAD-shaped traceability
+  · Requirements traceability
 </footer>
 
 <script>

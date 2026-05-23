@@ -10,7 +10,7 @@ import { ExitCode } from '../motes/exitCodes.js';
 const program = new Command();
 program
   .name('trace')
-  .description('CLAD-shaped requirements traceability tracer.')
+  .description('Requirements traceability tracer.')
   .version('0.1.0');
 
 const defaultOpts = (cmd: Command) =>

@@ -1,5 +1,5 @@
 # Composite GitHub Action: audit → HTML report → artifact upload → PR comment.
-# Wraps the requirements-tracer CLI (tools/requirements-tracer in this monorepo).
+# Wraps @underwoodinc/requirements-tracer (npm) or a vendored dist/frames/cli.js checkout.
 name: Requirements Tracer
 description: Audit test trace IDs against a requirements registry, generate an HTML report, upload it, and optionally post a PR comment.
 
@@ -23,9 +23,9 @@ inputs:
   tracer-path:
     description: Path to the tracer cli.js, relative to the repository root. Ignored when tracer-package is set.
     required: false
-    default: 'tools/requirements-tracer/dist/frames/cli.js'
+    default: 'dist/frames/cli.js'
   tracer-package:
-    description: Optional npm package for npx (e.g. @underwoodinc/requirements-tracer@0.1.1). Overrides tracer-path when set.
+    description: Optional npm package for npx (e.g. @underwoodinc/requirements-tracer@0.1.2). Overrides tracer-path when set.
     required: false
     default: ''
   build-tracer:

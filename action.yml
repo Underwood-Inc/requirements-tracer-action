@@ -3,6 +3,10 @@
 name: Requirements Tracer
 description: Audit test trace IDs against a requirements registry, generate an HTML report, upload it, and optionally post a PR comment.
 
+branding:
+  icon: check-square
+  color: blue
+
 inputs:
   working-directory:
     description: Directory containing .traceability.yaml and the requirements registry (audit --root).

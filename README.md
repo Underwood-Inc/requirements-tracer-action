@@ -9,6 +9,10 @@ Composite GitHub Action that runs the **requirements-tracer** CLI in CI:
 
 Published by [Underwood-Inc](https://github.com/Underwood-Inc).
 
+**Published repo:** https://github.com/Underwood-Inc/requirements-tracer-action — tag `v0.1.0`.
+
+This folder is the source copy in the monorepo; CI consumers use `Underwood-Inc/requirements-tracer-action@v0.1.0`, not `./packages/...`.
+
 ## Quick start
 
 Your project directory needs:

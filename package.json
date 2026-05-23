@@ -1,6 +1,6 @@
 {
   "name": "@underwoodinc/requirements-tracer",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Requirements traceability tool: scans test files, audits trace IDs against a requirements registry, generates a self-contained HTML report, and posts PR comments.",
   "type": "module",
   "license": "MIT",

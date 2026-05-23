@@ -8,8 +8,8 @@ Published by [Underwood-Inc](https://github.com/Underwood-Inc).
 
 | Surface | Install / use |
 |---------|----------------|
-| **GitHub Action** | `uses: Underwood-Inc/requirements-tracer-action@v0.1.2` |
-| **npm CLI** | [`@underwoodinc/requirements-tracer`](https://www.npmjs.com/package/@underwoodinc/requirements-tracer) `@0.1.2` |
+| **GitHub Action** | `uses: Underwood-Inc/requirements-tracer-action@v0.1.3` |
+| **npm CLI** | [`@underwoodinc/requirements-tracer`](https://www.npmjs.com/package/@underwoodinc/requirements-tracer) `@0.1.3` |
 | **Programmatic API** | `@underwoodinc/requirements-tracer/load-registry` |
 | **Reference adopter** | [hello-desktop](https://github.com/Underwood-Inc/hello-desktop) |
 
@@ -35,7 +35,7 @@ Requirement kinds (`FR`, `NFR`, `SEC`, `BR`, and custom keys like `META`, `A11Y`
 ### 1. Install the CLI
 
 ```bash
-npm install -D @underwoodinc/requirements-tracer@0.1.2
+npm install -D @underwoodinc/requirements-tracer@0.1.3
 ```
 
 ### 2. Add a registry
@@ -126,9 +126,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: Underwood-Inc/requirements-tracer-action@v0.1.2
+      - uses: Underwood-Inc/requirements-tracer-action@v0.1.3
         with:
-          tracer-package: '@underwoodinc/requirements-tracer@0.1.2'
+          tracer-package: '@underwoodinc/requirements-tracer@0.1.3'
           token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
@@ -141,7 +141,7 @@ The Action runs, in order: **audit** (with `TRACE_ANNOTATIONS=github`) → **rep
 | `working-directory` | `.` | Passed to `--root` |
 | `config-path` | `.traceability.yaml` | Relative to working-directory |
 | `registry-path` | `requirements-registry.yaml` | Legacy monolith path; shards use `registryGlobs` in config |
-| `tracer-package` | *(empty)* | **Recommended:** `@underwoodinc/requirements-tracer@0.1.2` |
+| `tracer-package` | *(empty)* | **Recommended:** `@underwoodinc/requirements-tracer@0.1.3` |
 | `tracer-path` | `dist/frames/cli.js` | Vendored CLI from repo root; ignored when `tracer-package` is set |
 | `build-tracer` | `false` | Run `pnpm build:tracer` before audit (fork contributors only) |
 | `strict` | `false` | Promote orphan / deprecated / unknown-tag warnings to errors |
@@ -156,9 +156,9 @@ The Action runs, in order: **audit** (with `TRACE_ANNOTATIONS=github`) → **rep
 If your workflow already posts a tailored summary (e.g. combined with coverage or valuation reports), disable the built-in comment and keep audit + report:
 
 ```yaml
-- uses: Underwood-Inc/requirements-tracer-action@v0.1.2
+- uses: Underwood-Inc/requirements-tracer-action@v0.1.3
   with:
-    tracer-package: '@underwoodinc/requirements-tracer@0.1.2'
+    tracer-package: '@underwoodinc/requirements-tracer@0.1.3'
     post-comment: 'false'
     report-dir: reports/trace-report   # match output.reportDir in .traceability.yaml
     artifact-name: my-trace-report

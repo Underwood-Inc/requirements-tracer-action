@@ -9,7 +9,7 @@
 - Every test must start with a **trace ID** like `[FR-001]` that exists in `requirements-registry.yaml` (or a merged registry shard).
 - Tests can carry optional **JSDoc tags** (`@description`, `@owner`, `@kind`, `@priority`, `@linked`, `@coverage`, `@external`) for richer metadata — see [jsdoc-tags.md](jsdoc-tags.md).
 - The **requirements-tracer** CLI scans test files (Vitest, Jest, Cypress, Playwright by default), audits trace IDs, and generates a **self-contained HTML artifact** with search, filters, and `summary.json`.
-- **Published for any repo:** [@underwoodinc/requirements-tracer](https://www.npmjs.com/package/@underwoodinc/requirements-tracer) on npm and [Underwood-Inc/requirements-tracer-action](https://github.com/Underwood-Inc/requirements-tracer-action) on GitHub (`v0.1.2`).
+- **Published for any repo:** [@underwoodinc/requirements-tracer](https://www.npmjs.com/package/@underwoodinc/requirements-tracer) on npm and [Underwood-Inc/requirements-tracer-action](https://github.com/Underwood-Inc/requirements-tracer-action) on GitHub (`v0.1.3`).
 - **Six audit rules** ship by default (see [Audit rules](#audit-rules)). Errors block CI; warnings are promotable with `--strict`.
 - On a pull request, CI emits **inline diff annotations**, uploads the HTML report, and posts a **fresh PR comment** each run (older traceability comments are collapsed, not deleted).
 

@@ -6,7 +6,7 @@
 
 ## TL;DR
 
-- **Fastest path:** `Underwood-Inc/requirements-tracer-action@v0.1.2` with `tracer-package: '@underwoodinc/requirements-tracer@0.1.2'`.
+- **Fastest path:** `Underwood-Inc/requirements-tracer-action@v0.1.3` with `tracer-package: '@underwoodinc/requirements-tracer@0.1.3'`.
 - **Pipeline:** `audit` → `report` → `upload-artifact` → `comment` → fail job if audit had errors.
 - **`TRACE_ANNOTATIONS=github`** during `audit` emits `::error` / `::warning` lines so failures appear **on the PR diff**.
 - **`TRACE_ARTIFACT_URL`** (from `upload-artifact@v7` `artifact-url` output) gives the PR comment a **direct download link**.
@@ -76,9 +76,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: Underwood-Inc/requirements-tracer-action@v0.1.2
+      - uses: Underwood-Inc/requirements-tracer-action@v0.1.3
         with:
-          tracer-package: '@underwoodinc/requirements-tracer@0.1.2'
+          tracer-package: '@underwoodinc/requirements-tracer@0.1.3'
           token: ${{ secrets.GITHUB_TOKEN }}
           strict: 'false'          # set 'true' on release branches
           post-comment: 'true'
@@ -338,7 +338,7 @@ Root `package.json` scripts (monorepo):
 External adopters (npm package):
 
 ```bash
-npm install -D @underwoodinc/requirements-tracer@0.1.2
+npm install -D @underwoodinc/requirements-tracer@0.1.3
 
 npx trace audit --root .
 npx trace report --root .

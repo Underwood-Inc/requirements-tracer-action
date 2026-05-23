@@ -11,7 +11,7 @@
 - **How tests link:** Put trace IDs in the test **description** — e.g. `[FR-001]`, `[SEC-CD-003]`, or `[FR-001, SEC-001]` in one test.
 - **Preset kinds:** `BR`, `FR`, `NFR`, `SEC` ship as defaults; add `META`, `A11Y`, `COMP`, or custom keys under `kinds:`.
 - **Report filters:** `@fr`, `@sec`, `@untested`, `#covered`, registry `#tags`, quoted phrases — see [Report search tokens](#report-search-and-filter-tokens).
-- **Latest release:** `v0.1.2` — branded HTML report, `summary.json`, direct artifact download in PR comments, **GitHub line annotations** on audit failures.
+- **Latest release:** `v0.1.3` — expanded npm README, documentation refresh, cleaner CLI and report copy.
 - **CI deep dive:** [ci-integration.md](ci-integration.md) — annotations, Action inputs, PR comment shape.
 
 **Deep references:** [configuration.md](configuration.md) (every YAML field) · [jsdoc-tags.md](jsdoc-tags.md) (optional test metadata)
@@ -332,9 +332,9 @@ flowchart LR
 Minimal Action wiring:
 
 ```yaml
-- uses: Underwood-Inc/requirements-tracer-action@v0.1.2
+- uses: Underwood-Inc/requirements-tracer-action@v0.1.3
   with:
-    tracer-package: '@underwoodinc/requirements-tracer@0.1.2'
+    tracer-package: '@underwoodinc/requirements-tracer@0.1.3'
     token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
@@ -357,7 +357,7 @@ The Action sets `TRACE_ANNOTATIONS=github` on audit and passes `artifact-url` to
 
 | Package | URL |
 |---------|-----|
-| GitHub Action | [Underwood-Inc/requirements-tracer-action](https://github.com/Underwood-Inc/requirements-tracer-action) `@v0.1.2` |
+| GitHub Action | [Underwood-Inc/requirements-tracer-action](https://github.com/Underwood-Inc/requirements-tracer-action) `@v0.1.3` |
 | npm CLI | [@underwoodinc/requirements-tracer](https://www.npmjs.com/package/@underwoodinc/requirements-tracer) |
 | Reference adopter | [hello-desktop](https://github.com/Underwood-Inc/hello-desktop) |
 
@@ -368,7 +368,7 @@ The Action sets `TRACE_ANNOTATIONS=github` on audit and passes `artifact-url` to
 ### 1. Install
 
 ```bash
-npm install -D @underwoodinc/requirements-tracer@0.1.2
+npm install -D @underwoodinc/requirements-tracer@0.1.3
 ```
 
 ### 2. Registry (multi-kind)
@@ -415,9 +415,9 @@ npx trace report --root .
 ### 6. GitHub Actions
 
 ```yaml
-- uses: Underwood-Inc/requirements-tracer-action@v0.1.2
+- uses: Underwood-Inc/requirements-tracer-action@v0.1.3
   with:
-    tracer-package: '@underwoodinc/requirements-tracer@0.1.2'
+    tracer-package: '@underwoodinc/requirements-tracer@0.1.3'
     token: ${{ secrets.GITHUB_TOKEN }}
 ```
 

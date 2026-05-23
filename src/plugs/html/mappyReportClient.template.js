@@ -124,16 +124,16 @@ const PRI_TIP = {
 function kindBadge(kind) {
   if (!kind) return '';
   const tip = KIND_TIP[kind] ?? kind;
-  return \`<span class="kind-badge kind-\${esc(kind.toLowerCase())}" data-tip="\${esc(tip)}">\${esc(kind)}</span>\`;
+  return `<span class="kind-badge kind-${esc(kind.toLowerCase())}" data-tip="${esc(tip)}">${esc(kind)}</span>`;
 }
 function priBadge(p) {
   if (!p) return '';
   const tip = PRI_TIP[p] ?? p;
-  return \`<span class="pri pri-\${esc(p)}" data-tip="\${esc(tip)}">\${esc(p)}</span>\`;
+  return `<span class="pri pri-${esc(p)}" data-tip="${esc(tip)}">${esc(p)}</span>`;
 }
 function testsBadge(n) {
   if (n === 0) return '<span class="tests-badge tests-none">—</span>';
-  return \`<span class="tests-badge \${n >= 10 ? 'tests-many' : 'tests-some'}">\${n}</span>\`;
+  return `<span class="tests-badge ${n >= 10 ? 'tests-many' : 'tests-some'}">${n}</span>`;
 }
 
 function renderRow(r, q) {
@@ -142,35 +142,35 @@ function renderRow(r, q) {
   const cls = dep ? 'deprecated' : unt ? 'untested' : '';
 
   const summary = r.summary ? r.summary.slice(0, 140) + (r.summary.length > 140 ? '…' : '') : '';
-  const titleCell = \`<div class="title-text">\${highlight(r.title, q)}\${dep ? '<span class="dep-tag">deprecated</span>' : ''}</div>\`
-    + (summary ? \`<div class="summary-text">\${highlight(summary, q)}</div>\` : '');
+  const titleCell = `<div class="title-text">${highlight(r.title, q)}${dep ? '<span class="dep-tag">deprecated</span>' : ''}</div>`
+    + (summary ? `<div class="summary-text">${highlight(summary, q)}</div>` : '');
 
   const hasTests = r.tests.length > 0;
-  const expandId = \`tx-\${r.id.replace(/[^a-zA-Z0-9]/g, '-')}\`;
+  const expandId = `tx-${r.id.replace(/[^a-zA-Z0-9]/g, '-')}`;
 
   const countCell = hasTests
-    ? \`<button class="tests-badge \${r.testCount >= 10 ? 'tests-many' : 'tests-some'} tests-toggle"
-         aria-expanded="false" aria-controls="\${expandId}" data-expand="\${expandId}"
-         data-tip="Click to expand \${r.testCount} linked test\${r.testCount !== 1 ? 's' : ''}">\${r.testCount}</button>\`
+    ? `<button class="tests-badge ${r.testCount >= 10 ? 'tests-many' : 'tests-some'} tests-toggle"
+         aria-expanded="false" aria-controls="${expandId}" data-expand="${expandId}"
+         data-tip="Click to expand ${r.testCount} linked test${r.testCount !== 1 ? 's' : ''}">${r.testCount}</button>`
     : '<span class="tests-badge tests-none" data-tip="No tests reference this requirement ID yet.">—</span>';
 
-  const mainRow = \`<tr class="\${cls}">
-    <td style="font-family:'SF Mono',Consolas,monospace;font-size:.79rem;white-space:nowrap">\${highlight(r.id, q)}</td>
-    <td>\${kindBadge(r.kind)}</td>
-    <td>\${priBadge(r.priority)}</td>
-    <td>\${titleCell}</td>
-    <td class="n">\${countCell}</td>
-  </tr>\`;
+  const mainRow = `<tr class="${cls}">
+    <td style="font-family:'SF Mono',Consolas,monospace;font-size:.79rem;white-space:nowrap">${highlight(r.id, q)}</td>
+    <td>${kindBadge(r.kind)}</td>
+    <td>${priBadge(r.priority)}</td>
+    <td>${titleCell}</td>
+    <td class="n">${countCell}</td>
+  </tr>`;
 
   if (!hasTests) return mainRow;
 
   const listItems = r.tests.map(t =>
-    \`<li><span class="test-layer test-layer-\${esc(t.layer)}">\${esc(t.layer)}</span><span class="test-file">\${esc(t.file)}:\${t.line}</span><span class="test-desc">\${esc(t.description)}</span></li>\`
+    `<li><span class="test-layer test-layer-${esc(t.layer)}">${esc(t.layer)}</span><span class="test-file">${esc(t.file)}:${t.line}</span><span class="test-desc">${esc(t.description)}</span></li>`
   ).join('');
 
-  return mainRow + \`<tr class="tests-expand-row \${cls}" id="\${expandId}" hidden>
-    <td colspan="5" class="tests-expand-cell"><ul class="test-list">\${listItems}</ul></td>
-  </tr>\`;
+  return mainRow + `<tr class="tests-expand-row ${cls}" id="${expandId}" hidden>
+    <td colspan="5" class="tests-expand-cell"><ul class="test-list">${listItems}</ul></td>
+  </tr>`;
 }
 
 let currentReqs = REQS;
@@ -180,7 +180,7 @@ function render() {
   const sorted = sortReqs(currentReqs);
   document.getElementById('reqs-body').innerHTML = sorted.map(r => renderRow(r, currentQ)).join('');
   document.getElementById('result-count').textContent =
-    \`Showing \${currentReqs.length} of \${REQS.length} requirements\`;
+    `Showing ${currentReqs.length} of ${REQS.length} requirements`;
   document.getElementById('no-results').hidden = currentReqs.length > 0;
   document.getElementById('reqs-table').hidden  = currentReqs.length === 0;
 }
@@ -321,13 +321,13 @@ function updateSuggestions() {
   let html = '';
   if (grouped.at.length) {
     html += grouped.at.map((s, i) =>
-      \`<div class="sugg-item" data-idx="\${i}" role="option">\${renderSuggItem(s)}</div>\`).join('');
+      `<div class="sugg-item" data-idx="${i}" role="option">${renderSuggItem(s)}</div>`).join('');
   }
   if (grouped.hash.length) {
     const offset = grouped.at.length;
     html += '<div class="sugg-group-title"># disposition / tag</div>';
     html += grouped.hash.map((s, i) =>
-      \`<div class="sugg-item" data-idx="\${offset + i}" role="option">\${renderSuggItem(s)}</div>\`).join('');
+      `<div class="sugg-item" data-idx="${offset + i}" role="option">${renderSuggItem(s)}</div>`).join('');
   }
   suggEl.innerHTML = html;
   suggEl.querySelectorAll('.sugg-item').forEach((el, i) => {
@@ -337,7 +337,7 @@ function updateSuggestions() {
 }
 
 function renderSuggItem(s) {
-  return \`<span class="sugg-token">\${s.token}</span><span class="sugg-desc">\${s.desc}</span>\`;
+  return `<span class="sugg-token">${s.token}</span><span class="sugg-desc">${s.desc}</span>`;
 }
 
 function handleSuggKey(e) {
@@ -434,10 +434,10 @@ function buildReleaseMarkdown() {
     '|---|---|---|',
     ...rows.map(r => {
       const e2eCount = r.tests.filter(t => t.layer === 'e2e').length;
-      return \`| \${r.id} | \${r.title.replace(/\\|/g, '\\\\|')} | \${e2eCount} |\`;
+      return `| ${r.id} | ${r.title.replace(/\\|/g, '\\\\|')} | ${e2eCount} |`;
     }),
     '',
-    \`_Generated from dist/trace-report · \${rows.length} FR requirement(s) with e2e coverage_\`,
+    `_Generated from dist/trace-report · ${rows.length} FR requirement(s) with e2e coverage_`,
   ];
   return lines.join('\\n');
 }
@@ -449,7 +449,7 @@ document.getElementById('release-export')?.addEventListener('click', async funct
     await navigator.clipboard.writeText(text);
     this.classList.add('copied');
     this.textContent = 'Copied!';
-    if (hint) hint.textContent = \`\${REQS.filter(r => r.kind === 'FR' && r.hasE2e).length} FR rows copied\`;
+    if (hint) hint.textContent = `${REQS.filter(r => r.kind === 'FR' && r.hasE2e).length} FR rows copied`;
     setTimeout(() => {
       this.classList.remove('copied');
       this.textContent = 'Copy release checklist (FR + e2e)';

@@ -1,0 +1,48 @@
+{
+  "name": "@underwoodinc/requirements-tracer",
+  "version": "0.1.1",
+  "description": "CLAD-shaped requirements traceability tool: scans test files, audits trace IDs against requirements-registry.yaml, generates a self-contained HTML report, and posts PR comments.",
+  "type": "module",
+  "license": "MIT",
+  "author": "inc.underwood",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Underwood-Inc/requirements-tracer-action.git"
+  },
+  "homepage": "https://github.com/Underwood-Inc/requirements-tracer-action#readme",
+  "bugs": {
+    "url": "https://github.com/Underwood-Inc/requirements-tracer-action/issues"
+  },
+  "main": "./dist/frames/cli.js",
+  "exports": {
+    ".": "./dist/frames/cli.js",
+    "./load-registry": "./dist/motes/loadRegistry.js"
+  },
+  "bin": {
+    "trace": "dist/frames/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@octokit/rest": "^21.0.2",
+    "commander": "^12.1.0",
+    "fast-glob": "^3.3.2",
+    "ts-morph": "^24.0.0",
+    "yaml": "^2.5.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "typescript": "^5.6.2",
+    "vitest": "^2.1.1"
+  }
+}

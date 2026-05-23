@@ -23,7 +23,7 @@ inputs:
   tracer-path:
     description: Path to the tracer cli.js, relative to the repository root. Ignored when tracer-package is set.
     required: false
-    default: 'tools/requirements-tracer/dist/frames/cli.js'
+    default: 'dist/frames/cli.js'
   tracer-package:
     description: Optional npm package for npx (e.g. @underwoodinc/requirements-tracer@0.1.1). Overrides tracer-path when set.
     required: false
@@ -73,7 +73,7 @@ runs:
     - name: Build tracer
       if: inputs.build-tracer == 'true'
       shell: bash
-      run: pnpm build:tracer
+      run: npm ci && npm run build
 
     - name: Run audit
       id: audit

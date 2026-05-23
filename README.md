@@ -1,29 +1,16 @@
-# Requirements Tracer — GitHub Action
+# Requirements Tracer
 
-Composite GitHub Action that runs the **requirements-tracer** CLI in CI:
-
-1. **Audit** — scan tests for trace IDs and validate them against your requirements registry
-2. **Report** — generate a self-contained HTML traceability report
-3. **Artifact** — upload the report for download from the Actions run
-4. **Comment** — post a new PR summary comment on pull requests
+One repo: **CLI source**, **npm package**, and **GitHub Action**.
 
 Published by [Underwood-Inc](https://github.com/Underwood-Inc).
 
-| Repo | Purpose |
-|------|---------|
-| [requirements-tracer](https://github.com/Underwood-Inc/requirements-tracer) | CLI source code |
-| [requirements-tracer-action](https://github.com/Underwood-Inc/requirements-tracer-action) | GitHub Action (`@v0.1.1`) |
-| [@underwoodinc/requirements-tracer](https://www.npmjs.com/package/@underwoodinc/requirements-tracer) | npm CLI (`0.1.1`) |
+| Surface | Install / use |
+|---------|----------------|
+| **GitHub Action** | `uses: Underwood-Inc/requirements-tracer-action@v0.1.1` |
+| **npm CLI** | `npm install -D @underwoodinc/requirements-tracer` |
+| **Local CLI** | `npm run build && npx trace audit --root .` |
 
-## Quick start
-
-Your project directory needs:
-
-- `requirements-registry.yaml` — source of truth for requirement IDs
-- `.traceability.yaml` — globs, kinds, output paths
-- Tests whose descriptions include trace IDs, e.g. `test('[FR-001] loads home view', …)`
-
-### With published npm CLI (recommended)
+## GitHub Actions (recommended)
 
 ```yaml
 permissions:
@@ -43,53 +30,36 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-### With a vendored / monorepo tracer checkout
+Your project needs `requirements-registry.yaml`, `.traceability.yaml`, and tests tagged like `test('[FR-001] loads home view', …)`.
 
-```yaml
-      - uses: actions/checkout@v6
+## CLI commands
 
-      - uses: pnpm/action-setup@v6
-        with:
-          version: 10
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-
-      - uses: Underwood-Inc/requirements-tracer-action@v0.1.1
-        with:
-          working-directory: apps/my-app
-          tracer-path: tools/requirements-tracer/dist/frames/cli.js
-          build-tracer: 'true'
-          token: ${{ secrets.GITHUB_TOKEN }}
+```bash
+trace audit --root .
+trace report --root .
+trace scan --root .
+trace comment --root . --new
 ```
 
-## Inputs
+## Development
 
-| Input | Default | Description |
-|-------|---------|-------------|
-| `working-directory` | `.` | Root passed to `--root` (contains config + registry). |
-| `config-path` | `.traceability.yaml` | Relative to `working-directory`. |
-| `registry-path` | `requirements-registry.yaml` | Relative to `working-directory`. |
-| `tracer-path` | `tools/requirements-tracer/dist/frames/cli.js` | Path to `cli.js` from repo root. Ignored when `tracer-package` is set. |
-| `tracer-package` | *(empty)* | npm package for `npx` (optional `@version` suffix). |
-| `build-tracer` | `false` | Run `pnpm build:tracer` at repo root before audit. |
-| `strict` | `false` | Pass `--strict` (orphan / deprecated / unknown-tag warnings → errors). |
-| `post-comment` | `true` | Post PR comment on `pull_request` events. |
-| `artifact-name` | `traceability-report` | Uploaded artifact name. |
-| `report-dir` | `traceability-report` | Report folder relative to `working-directory`. |
-| `token` | `github.token` | Token for PR comments. |
-| `node-version` | `22` | Node.js version (tracer requires Node ≥ 22). |
+```bash
+npm install
+npm test
+npm run build
+```
 
-## Outputs
+Requires Node.js 22+.
 
-| Output | Description |
-|--------|-------------|
-| `audit-outcome` | `success` or `failure` from the audit step. |
+## Layout
+
+```
+action.yml    # GitHub Action (composite)
+src/          # CLI source (TypeScript)
+test/         # Vitest tests
+dist/         # build output (npm publish)
+```
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
+MIT

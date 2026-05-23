@@ -1,6 +1,6 @@
 {
   "name": "@underwoodinc/requirements-tracer",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "CLAD-shaped requirements traceability tool: scans test files, audits trace IDs against requirements-registry.yaml, generates a self-contained HTML report, and posts PR comments.",
   "type": "module",
   "license": "MIT",
@@ -28,10 +28,8 @@
     "node": ">=22.0.0"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "prepublishOnly": "npm run build"
+    "build": "tsc -p tsconfig.json && node --input-type=module -e \"import fs from 'node:fs'; const p='dist/plugs/html'; fs.mkdirSync(p,{recursive:true}); fs.copyFileSync('src/plugs/html/mappyReportClient.template.js', p+'/mappyReportClient.template.js');\"",
+    "test": "vitest run"
   },
   "dependencies": {
     "@octokit/rest": "^21.0.2",
@@ -39,10 +37,5 @@
     "fast-glob": "^3.3.2",
     "ts-morph": "^24.0.0",
     "yaml": "^2.5.1"
-  },
-  "devDependencies": {
-    "@types/node": "^22.7.4",
-    "typescript": "^5.6.2",
-    "vitest": "^2.1.1"
   }
 }

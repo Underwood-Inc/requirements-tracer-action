@@ -23,7 +23,7 @@ inputs:
   tracer-path:
     description: Path to the tracer cli.js, relative to the repository root. Ignored when tracer-package is set.
     required: false
-    default: 'dist/frames/cli.js'
+    default: 'tools/requirements-tracer/dist/frames/cli.js'
   tracer-package:
     description: Optional npm package for npx (e.g. @underwoodinc/requirements-tracer@0.1.1). Overrides tracer-path when set.
     required: false
@@ -73,7 +73,7 @@ runs:
     - name: Build tracer
       if: inputs.build-tracer == 'true'
       shell: bash
-      run: npm ci && npm run build
+      run: pnpm build:tracer
 
     - name: Run audit
       id: audit
@@ -133,6 +133,7 @@ runs:
         fi
 
     - name: Upload report artifact
+      id: upload-report
       if: always()
       uses: actions/upload-artifact@v7
       with:
@@ -147,6 +148,7 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
         GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
+        TRACE_ARTIFACT_URL: ${{ steps.upload-report.outputs.artifact-url }}
         TRACER_PATH: ${{ github.workspace }}/${{ inputs.tracer-path }}
         TRACER_PACKAGE: ${{ inputs.tracer-package }}
       run: |
@@ -160,14 +162,14 @@ runs:
             --root . \
             --config "${{ inputs.config-path }}" \
             --registry "${{ inputs.registry-path }}" \
-            --new --artifact-run "${{ github.run_id }}" \
+            --new \
             $STRICT_FLAG
         else
           node "$TRACER_PATH" comment \
             --root . \
             --config "${{ inputs.config-path }}" \
             --registry "${{ inputs.registry-path }}" \
-            --new --artifact-run "${{ github.run_id }}" \
+            --new \
             $STRICT_FLAG
         fi
 

@@ -55,17 +55,25 @@ export async function commentEngine(input: CommentEngineInput): Promise<{ commen
     lines.push('');
   }
 
+  const docsUrl =
+    config.branding?.docsUrl ?? 'https://github.com/Underwood-Inc/requirements-tracer-action#readme';
+
   if (artifactUrl || runId) {
     lines.push('### Artifacts');
-    if (artifactUrl) lines.push(`- 📦 [Download HTML report](${artifactUrl})`);
-    else if (runId) lines.push(`- 📦 Workflow run: \`${runId}\` — see the **Artifacts** section for \`traceability-report\`.`);
+    if (artifactUrl) {
+      lines.push(
+        `📦 **[Download traceability report ↓](${artifactUrl})** — HTML + summary JSON · 30-day retention`,
+      );
+    } else if (runId) {
+      lines.push(
+        `- 📦 Workflow run: \`${runId}\` — see the **Artifacts** section for \`traceability-report\`.`,
+      );
+    }
     lines.push('');
   }
 
   lines.push('### Docs');
-  lines.push('- [Trace ID conventions](docs/traceability/jsdoc-tags.md)');
-  lines.push('- [Configuration](docs/traceability/configuration.md)');
-  lines.push('- [CI integration](docs/traceability/ci-integration.md)');
+  lines.push(`- [Requirements tracer documentation](${docsUrl})`);
 
   if (config.linkResolvers.length > 0) {
     lines.push('');

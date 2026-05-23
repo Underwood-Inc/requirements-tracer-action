@@ -92,6 +92,12 @@ export interface TraceabilityConfig {
     readonly newCommentEachRun: boolean;
     readonly commentTitle: string;
   };
+  /** Optional report branding — defaults to Underwood tracer docs when unset. */
+  readonly branding?: {
+    readonly projectName?: string;
+    readonly docsUrl?: string;
+    readonly repoUrl?: string;
+  };
   /** Glob patterns (relative to workspace root) for co-located registry shards. */
   readonly registryGlobs?: readonly string[];
 }

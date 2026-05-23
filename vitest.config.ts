@@ -8,7 +8,7 @@ export default defineConfig({
     reporters: ['default'],
     coverage: {
       reporter: ['text', 'html'],
-      reportsDirectory: './coverage',
+      reportsDirectory: '../../coverage',
     },
   },
 });

@@ -110,6 +110,7 @@ function makeResult(overrides: Partial<AuditResult> = {}): AuditResult {
     artifactUrl: 'https://github.com/org/repo/actions/runs/12345',
     nowIsoUtc: '2026-05-13T12:00:00.000Z',
   });
+  expect(client.comments[0].body).toContain('Download traceability report');
   expect(client.comments[0].body).toContain('actions/runs/12345');
 });
 

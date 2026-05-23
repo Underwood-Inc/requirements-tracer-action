@@ -92,6 +92,17 @@ export class YamlConfigReader implements ConfigReader {
       ? (data.registryGlobs as string[]).filter((g) => typeof g === 'string' && g.length > 0)
       : undefined;
 
+    const brandingCfg = (data.branding && typeof data.branding === 'object')
+      ? (data.branding as Record<string, unknown>)
+      : undefined;
+    const branding = brandingCfg
+      ? {
+          projectName: typeof brandingCfg.projectName === 'string' ? brandingCfg.projectName : undefined,
+          docsUrl: typeof brandingCfg.docsUrl === 'string' ? brandingCfg.docsUrl : undefined,
+          repoUrl: typeof brandingCfg.repoUrl === 'string' ? brandingCfg.repoUrl : undefined,
+        }
+      : undefined;
+
     return {
       schema_version: 1,
       testGlobs,
@@ -104,6 +115,7 @@ export class YamlConfigReader implements ConfigReader {
       otherReports,
       output,
       prComment,
+      branding,
       registryGlobs,
     };
   }

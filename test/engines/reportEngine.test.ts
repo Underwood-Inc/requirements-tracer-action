@@ -53,8 +53,9 @@ function makeConfig(): TraceabilityConfig {
 
   expect(await fs.exists('/repo/traceability-report/index.html')).toBe(true);
   const html = await fs.readFile('/repo/traceability-report/index.html');
-  expect(html).toContain('<!doctype html>');
-  expect(html).toContain('FR-001');
-  expect(html).toContain('Loading state');
+  expect(html).toContain('<!DOCTYPE html>');
+  expect(html).toContain('#ceb26f');
+  expect(html).toContain('Traceability Report');
+  expect(await fs.exists('/repo/traceability-report/summary.json')).toBe(true);
   expect(await fs.exists('/repo/traceability-report/audit.json')).toBe(true);
 });

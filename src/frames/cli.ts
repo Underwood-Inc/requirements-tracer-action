@@ -102,7 +102,8 @@ defaultOpts(program.command('comment'))
   .description('Post a NEW PR comment with the audit summary (requires GitHub context).')
   .option('--new', 'force-create a new comment (default behaviour)', false)
   .option('--strict', 'promote orphan / deprecated / unknown-tag warnings to errors', false)
-  .option('--artifact-run <id>', 'GitHub Actions run id for the artifact link')
+  .option('--artifact-run <id>', 'GitHub Actions run id (fallback when --artifact-url is unset)')
+  .option('--artifact-url <url>', 'Direct artifact download URL from actions/upload-artifact')
   .action(async (opts) => {
     const w = createCliWeave();
     try {
@@ -139,10 +140,12 @@ defaultOpts(program.command('comment'))
         strict: opts.strict === true,
       });
 
-      const serverUrl = process.env.GITHUB_SERVER_URL ?? 'https://github.com';
-      const artifactUrl = opts.artifactRun
-        ? `${serverUrl}/${owner}/${repo}/actions/runs/${opts.artifactRun}`
-        : undefined;
+      const artifactUrl =
+        process.env.TRACE_ARTIFACT_URL ??
+        opts.artifactUrl ??
+        (opts.artifactRun
+          ? `${process.env.GITHUB_SERVER_URL ?? 'https://github.com'}/${owner}/${repo}/actions/runs/${opts.artifactRun}`
+          : undefined);
 
       const out = await commentEngine({
         client: w.github,

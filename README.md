@@ -9,9 +9,11 @@ Composite GitHub Action that runs the **requirements-tracer** CLI in CI:
 
 Published by [Underwood-Inc](https://github.com/Underwood-Inc).
 
-**Published repo:** https://github.com/Underwood-Inc/requirements-tracer-action — tag `v0.1.1`.
-
-This folder is the source copy in the monorepo; CI consumers use `Underwood-Inc/requirements-tracer-action@v0.1.1`, not `./packages/...`.
+| Repo | Purpose |
+|------|---------|
+| [requirements-tracer](https://github.com/Underwood-Inc/requirements-tracer) | CLI source code |
+| [requirements-tracer-action](https://github.com/Underwood-Inc/requirements-tracer-action) | GitHub Action (`@v0.1.1`) |
+| [@underwoodinc/requirements-tracer](https://www.npmjs.com/package/@underwoodinc/requirements-tracer) | npm CLI (`0.1.1`) |
 
 ## Quick start
 
